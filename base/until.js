@@ -70,6 +70,28 @@ const verifyPass = async (password, hash) => {
   return result;
 };
 
+const generateCode = () => {
+  var code = "";
+  for (var i = 0; i < 5; i++) {
+    code += Math.floor(Math.random() * (9 - 0) + 0);
+  }
+  return code;
+};
+
+const createDefaultUser = (cloneObject) => {
+  return {
+    ...cloneObject,
+    active: false,
+    createAt: new Date().toString(),
+    block: false,
+    friendsList: [],
+    chatsList: [],
+    avatar: "",
+    background: "",
+    code: generateCode(),
+  };
+};
+
 module.exports = {
   createUniqueID,
   fixTextSpaceAndLine,
@@ -77,4 +99,5 @@ module.exports = {
   validate,
   hashPass,
   verifyPass,
+  createDefaultUser,
 };

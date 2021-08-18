@@ -1,7 +1,13 @@
-const { validate, verifyPass } = require("../base/until");
-const { loginVal } = require("../base/validate");
+const {
+  validate,
+  verifyPass,
+  createDefaultUser,
+  hashPass,
+} = require("../base/until");
+const { loginVal, registerVal, activeUserVal } = require("../base/validate");
 const { signToken } = require("../config/jwt");
-const { valHasExistDB } = require("../service");
+const { sendCode } = require("../config/nodemail");
+const { valHasExistDB, createUser, activeUser } = require("../service");
 
 const handleLogin = async (req, res, next) => {
   try {
@@ -14,20 +20,29 @@ const handleLogin = async (req, res, next) => {
     }
 
     //validate user data
-    const find = await valHasExistDB("username", body.username, "User");
+    const find = await valHasExistDB("username", valBody.username, "User");
     if (!find) {
       return next(new Error(`${404}:${"Not found user !"}`));
     }
 
     //validate password
-    const valPass = verifyPass(body.password, find.password);
+    const valPass = await verifyPass(valBody.password, find.password);
     if (!valPass) {
       return next(new Error(`${400}:${"Password wrong !"}`));
+    }
+
+    //validate active account
+    if (!find.active) {
+      return next(new Error(`${400}:${"Account not active !"}`));
     }
 
     //delete field private
     delete find.password;
     delete find.active;
+    delete find.createAt;
+    delete find.block;
+    delete find.code;
+    delete find._id;
 
     //generate token with payload is user data
     const accessToken = signToken(find);
@@ -45,6 +60,102 @@ const handleLogin = async (req, res, next) => {
   }
 };
 
+const handleRegister = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, registerVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //validate user data
+    const find = await valHasExistDB("username", valBody.username, "User");
+    if (find) {
+      return next(new Error(`${404}:${"Username has not exist !"}`));
+    }
+
+    //hash password
+    valBody.password = await hashPass(valBody.password);
+
+    //create default user
+    const defaultUser = createDefaultUser(valBody);
+
+    //send code active account
+    var code = await sendCode(defaultUser.email, defaultUser.code);
+
+    if (code == false) {
+      return next(
+        new Error(
+          `${400}:${"Send code active to account fail, Pls check log !"}`
+        )
+      );
+    }
+
+    //create user on db
+    var user = await createUser(defaultUser);
+    if (!user) {
+      return next(
+        new Error(`${400}:${"Create new user fail, Pls check log !"}`)
+      );
+    }
+
+    //delete field private
+    delete defaultUser.password;
+    delete defaultUser.active;
+    delete defaultUser.createAt;
+    delete defaultUser.block;
+    delete defaultUser.code;
+    delete defaultUser._id;
+
+    return res.send({
+      status: true,
+      data: {
+        userData: defaultUser,
+      },
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleActiveUser = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, activeUserVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //validate user data
+    const find = await valHasExistDB("username", valBody.username, "User");
+    if (!find) {
+      return next(new Error(`${404}:${"Username has not exist !"}`));
+    }
+
+    //verifycode
+    if (find.code != valBody.code) {
+      return next(new Error(`${400}:${"Code active wrong !"}`));
+    }
+
+    var active = await activeUser(find.username);
+    if (!active) {
+      return next(new Error(`${400}:${"Active fail, Pls check log!"}`));
+    }
+
+    return res.send({
+      status: true,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
 module.exports = {
   handleLogin,
+  handleRegister,
+  handleActiveUser,
 };

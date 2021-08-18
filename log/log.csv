@@ -16,3 +16,27 @@ Wed Aug 18 2021 19:11:49 GMT+0700 (Indochina Time),404,Not found user !,localhos
 Wed Aug 18 2021 19:11:55 GMT+0700 (Indochina Time),400,Validate data field !,localhost,::1
 Wed Aug 18 2021 19:12:09 GMT+0700 (Indochina Time),Unexpected token } in JSON at position 5,Unexpected token } in JSON at position 54,localhost,::1
 Wed Aug 18 2021 19:12:11 GMT+0700 (Indochina Time),404,Not found user !,localhost,::1
+Wed Aug 18 2021 21:22:34 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:28:58 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:29:08 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:29:50 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:30:43 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:30:53 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:31:10 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:31:51 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:33:50 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:34:17 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 21:34:42 GMT+0700 (Indochina Time),400,item is not defined,localhost,::1
+Wed Aug 18 2021 21:34:55 GMT+0700 (Indochina Time),400,No recipients defined,localhost,::1
+Wed Aug 18 2021 21:35:48 GMT+0700 (Indochina Time),404,Username has exist !,localhost,::1
+Wed Aug 18 2021 21:39:39 GMT+0700 (Indochina Time),400,Topology closed,localhost,::1
+Wed Aug 18 2021 21:40:06 GMT+0700 (Indochina Time),400,Send code active to account fail, Pls check log !,localhost,::1
+Wed Aug 18 2021 21:48:45 GMT+0700 (Indochina Time),400,Account not active !,localhost,::1
+Wed Aug 18 2021 22:05:07 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 22:06:37 GMT+0700 (Indochina Time),400,MongoClient must be connected to perform this operation,localhost,::1
+Wed Aug 18 2021 22:06:46 GMT+0700 (Indochina Time),400,Code active wrong !,localhost,::1
+Wed Aug 18 2021 22:06:56 GMT+0700 (Indochina Time),404,Username has not exist !,localhost,::1
+Wed Aug 18 2021 22:07:02 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Wed Aug 18 2021 22:07:08 GMT+0700 (Indochina Time),400,Update document requires atomic operators,localhost,::1
+Wed Aug 18 2021 22:07:10 GMT+0700 (Indochina Time),400,Update document requires atomic operators,localhost,::1
+Wed Aug 18 2021 22:08:08 GMT+0700 (Indochina Time),400,defaultUser is not defined,localhost,::1
