@@ -1,5 +1,8 @@
 const handleTest = (req, res, next) => {
-  next(new Error(`${403}:${"Test write log server !"}`));
+  console.log(req.user);
+  res.send({
+    status: true,
+  });
 };
 
 module.exports = {

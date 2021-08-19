@@ -68,3 +68,47 @@ module.exports.resetPassVal = [
     type: "string",
   },
 ];
+
+module.exports.updateProfileVal = [
+  {
+    field: "name",
+    type: "string",
+  },
+  {
+    field: "gennder",
+    type: "number",
+  },
+  {
+    field: "birthDay",
+    type: "string",
+  },
+  {
+    field: "avatar",
+    type: "string",
+  },
+  {
+    field: "background",
+    type: "string",
+  },
+];
+
+module.exports.findUserbyUsernameVal = [
+  {
+    field: "usernameFind",
+    type: "string",
+  },
+];
+
+module.exports.findMultiUserbyUsernameVal = [
+  {
+    field: "listUser",
+    type: "object",
+  },
+];
+
+module.exports.addFriendVal = [
+  {
+    field: "usernameFriend",
+    type: "string",
+  },
+];

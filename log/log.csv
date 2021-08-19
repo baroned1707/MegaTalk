@@ -47,3 +47,30 @@ Thu Aug 19 2021 12:43:51 GMT+0700 (Indochina Time),404,Code wrong !,localhost,::
 Thu Aug 19 2021 12:43:56 GMT+0700 (Indochina Time),404,Username has not exist !,localhost,::1
 Thu Aug 19 2021 12:44:00 GMT+0700 (Indochina Time),404,Code wrong !,localhost,::1
 Thu Aug 19 2021 12:44:18 GMT+0700 (Indochina Time),400,Password wrong !,localhost,::1
+Thu Aug 19 2021 17:50:15 GMT+0700 (Indochina Time),404,Not found token !,localhost,::1
+Thu Aug 19 2021 17:52:27 GMT+0700 (Indochina Time),403,Forbidden !,localhost,::1
+Thu Aug 19 2021 17:52:55 GMT+0700 (Indochina Time),403,Forbidden !,localhost,::1
+Thu Aug 19 2021 18:00:00 GMT+0700 (Indochina Time),403,Test write log server !,localhost,::1
+Thu Aug 19 2021 18:00:07 GMT+0700 (Indochina Time),403,Test write log server !,localhost,::1
+Thu Aug 19 2021 18:01:11 GMT+0700 (Indochina Time),403,Test write log server !,localhost,::1
+Thu Aug 19 2021 18:02:19 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 18:02:47 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 18:03:19 GMT+0700 (Indochina Time),Unexpected token } in JSON at position 13,Unexpected token } in JSON at position 135,localhost,::1
+Thu Aug 19 2021 18:03:23 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 18:03:33 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 18:12:39 GMT+0700 (Indochina Time),400,MongoClient must be connected to perform this operation,localhost,::1
+Thu Aug 19 2021 18:34:10 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 18:34:24 GMT+0700 (Indochina Time),400,MongoClient must be connected to perform this operation,localhost,::1
+Thu Aug 19 2021 18:35:02 GMT+0700 (Indochina Time),404,Username has not exist !,localhost,::1
+Thu Aug 19 2021 18:41:29 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 18:43:25 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 18:48:09 GMT+0700 (Indochina Time),400,Cannot convert undefined or null to object,localhost,::1
+Thu Aug 19 2021 18:48:14 GMT+0700 (Indochina Time),400,Cannot convert undefined or null to object,localhost,::1
+Thu Aug 19 2021 18:53:09 GMT+0700 (Indochina Time),404,Not found endpoint !,localhost,::1
+Thu Aug 19 2021 18:53:14 GMT+0700 (Indochina Time),400,MongoClient must be connected to perform this operation,localhost,::1
+Thu Aug 19 2021 19:51:02 GMT+0700 (Indochina Time),404,Username has not exist !,localhost,::1
+Thu Aug 19 2021 19:51:21 GMT+0700 (Indochina Time),404,Username has exist !,localhost,::1
+Thu Aug 19 2021 19:51:52 GMT+0700 (Indochina Time),400,Account not active !,localhost,::1
+Thu Aug 19 2021 19:53:54 GMT+0700 (Indochina Time),404,Not found username friend !,localhost,::1
+Thu Aug 19 2021 19:54:01 GMT+0700 (Indochina Time),400,You can`t add friend with yourself !,localhost,::1
+Thu Aug 19 2021 19:56:17 GMT+0700 (Indochina Time),400,Request has exist !,localhost,::1

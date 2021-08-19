@@ -1,4 +1,4 @@
-const { db } = require("../config/mongodb");
+const db = require("../config/mongodb").db("MegaTalk");
 
 const valHasExistDB = async (field, value, collection) => {
   var temp = {};
@@ -78,10 +78,50 @@ const updatePass = async (username, password) => {
   return result;
 };
 
+const updateProfile = async (username, update) => {
+  var result = true;
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: update,
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
+const updateFriendRequest = async (usernameFriend, requestsFriendList) => {
+  var result = true;
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: usernameFriend,
+      },
+      {
+        $set: {
+          requestsFriendList: requestsFriendList,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
 module.exports = {
   valHasExistDB,
   createUser,
   activeUser,
   createCode,
   updatePass,
+  updateProfile,
+  updateFriendRequest,
 };

@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
   delete decode.exp;
   delete decode.iat;
   req.user = decode;
-  next();
+  return next();
 };
 
 module.exports = {

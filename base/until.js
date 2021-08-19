@@ -86,6 +86,7 @@ const createDefaultUser = (cloneObject) => {
     block: false,
     friendsList: [],
     chatsList: [],
+    requestsFriendList: [],
     avatar: "",
     background: "",
     code: generateCode(),

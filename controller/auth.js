@@ -11,6 +11,10 @@ const {
   activeUserVal,
   forgotPassVal,
   resetPassVal,
+  updateProfileVal,
+  findUserbyUsernameVal,
+  findMultiUserbyUsernameVal,
+  addFriendVal,
 } = require("../base/validate");
 const { signToken } = require("../config/jwt");
 const { sendCode } = require("../config/nodemail");
@@ -20,6 +24,8 @@ const {
   activeUser,
   createCode,
   updatePass,
+  updateProfile,
+  updateFriendRequest,
 } = require("../service");
 
 const handleLogin = async (req, res, next) => {
@@ -65,7 +71,7 @@ const handleLogin = async (req, res, next) => {
       status: true,
       data: {
         accessToken: accessToken,
-        userData: find,
+        user: find,
       },
     });
   } catch (e) {
@@ -86,7 +92,7 @@ const handleRegister = async (req, res, next) => {
     //validate user data
     const find = await valHasExistDB("username", valBody.username, "User");
     if (find) {
-      return next(new Error(`${404}:${"Username has not exist !"}`));
+      return next(new Error(`${404}:${"Username has exist !"}`));
     }
 
     //hash password
@@ -124,9 +130,7 @@ const handleRegister = async (req, res, next) => {
 
     return res.send({
       status: true,
-      data: {
-        userData: defaultUser,
-      },
+      data: defaultUser,
     });
   } catch (e) {
     return next(new Error(`${400}:${e.message}`));
@@ -231,7 +235,7 @@ const handleResetPass = async (req, res, next) => {
 
     //check code
     if (valBody.code != find.code) {
-      return next(new Error(`${404}:${"Code wrong !"}`));
+      return next(new Error(`${400}:${"Code wrong !"}`));
     }
 
     //create new pass
@@ -240,10 +244,202 @@ const handleResetPass = async (req, res, next) => {
     //save pass in db
     var pass = await updatePass(valBody.username, newPass);
     if (!pass) {
-      return next(new Error(`${404}:${"Update pass fail, Pls check log !"}`));
+      return next(new Error(`${400}:${"Update pass fail, Pls check log !"}`));
     }
 
     return res.send({
+      status: true,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleUpdateProfile = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, updateProfileVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //validate user data
+    const find = await valHasExistDB("username", req.user.username, "User");
+    if (!find) {
+      return next(new Error(`${404}:${"Username has not exist !"}`));
+    }
+
+    //update user in db
+    const update = await updateProfile(req.user.username, valBody);
+    if (!update) {
+      return next(new Error(`${400}:${"Save update fail, Pls check log !"}`));
+    }
+
+    return res.send({
+      status: true,
+      data: valBody,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleFindUserByUsername = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, findUserbyUsernameVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //validate user data
+    const find = await valHasExistDB("username", valBody.usernameFind, "User");
+    if (!find) {
+      return next(new Error(`${404}:${"Username has not exist !"}`));
+    }
+
+    //delete field private
+    delete find.password;
+    delete find.active;
+    delete find.createAt;
+    delete find.block;
+    delete find.code;
+    delete find._id;
+    delete find.chatsList;
+    delete find.friendsList;
+
+    return res.send({
+      status: true,
+      data: find,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleFindMultiUserByUsername = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, findMultiUserbyUsernameVal);
+    var result = [];
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //find user by list user
+    for (var i = 0; i < valBody.listUser.length; i++) {
+      let tempUser = await valHasExistDB(
+        "username",
+        valBody.listUser[i],
+        "User"
+      );
+
+      if (tempUser) {
+        //delete field private
+        delete tempUser.password;
+        delete tempUser.active;
+        delete tempUser.createAt;
+        delete tempUser.block;
+        delete tempUser.code;
+        delete tempUser._id;
+        delete tempUser.chatsList;
+        delete tempUser.friendsList;
+
+        result.push(tempUser);
+      }
+    }
+
+    return res.send({
+      status: true,
+      data: result,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleGetProfileUser = async (req, res, next) => {
+  try {
+    //validate user data
+    const find = await valHasExistDB("username", req.user.username, "User");
+    if (!find) {
+      return next(new Error(`${404}:${"Username has not exist !"}`));
+    }
+
+    delete find.password;
+    delete find.active;
+    delete find.createAt;
+    delete find.block;
+    delete find.code;
+    delete find._id;
+
+    return res.send({
+      status: true,
+      data: find,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleAddFriend = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, addFriendVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //check username it your
+    if (valBody.usernameFriend === req.user.username) {
+      return next(
+        new Error(`${400}:${"You can`t add friend with yourself !"}`)
+      );
+    }
+
+    //find user add friend
+    const find = await valHasExistDB(
+      "username",
+      valBody.usernameFriend,
+      "User"
+    );
+    if (!find) {
+      return next(new Error(`${404}:${"Not found username friend !"}`));
+    }
+
+    //check request has exist !
+    const hasExist = find.requestsFriendList.some(
+      (item) => item.username === req.user.username
+    );
+    if (hasExist) {
+      return next(new Error(`${400}:${"Request has exist !"}`));
+    }
+
+    //send friend request
+    find.requestsFriendList.push({
+      username: req.user.username,
+      createAt: new Date().toString(),
+    });
+    const sendRequest = await updateFriendRequest(
+      valBody.usernameFriend,
+      find.requestsFriendList
+    );
+    if (!sendRequest) {
+      return next(new Error(`${400}:${"Send request fail !"}`));
+    }
+
+    //send notification to device to usernameFriend
+    //code here !
+
+    res.send({
       status: true,
     });
   } catch (e) {
@@ -257,4 +453,9 @@ module.exports = {
   handleActiveUser,
   handleForgotPass,
   handleResetPass,
+  handleUpdateProfile,
+  handleFindUserByUsername,
+  handleFindMultiUserByUsername,
+  handleGetProfileUser,
+  handleAddFriend,
 };

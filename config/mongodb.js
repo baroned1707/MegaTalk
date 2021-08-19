@@ -13,4 +13,4 @@ client.connect((err) => {
   console.log("Connect MongoDB Done !");
 });
 
-module.exports = { db: client.db("MegaTalk") };
+module.exports = client;
