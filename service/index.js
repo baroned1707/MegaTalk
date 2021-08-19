@@ -18,6 +18,26 @@ const createUser = async (user) => {
   return result;
 };
 
+const createCode = async (username, code) => {
+  var result = true;
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          code: code,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
 const activeUser = async (username) => {
   var result = true;
   await db
@@ -38,8 +58,30 @@ const activeUser = async (username) => {
   return result;
 };
 
+const updatePass = async (username, password) => {
+  var result = true;
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          password: password,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
 module.exports = {
   valHasExistDB,
   createUser,
   activeUser,
+  createCode,
+  updatePass,
 };

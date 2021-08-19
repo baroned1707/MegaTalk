@@ -46,3 +46,25 @@ module.exports.activeUserVal = [
     type: "string",
   },
 ];
+
+module.exports.forgotPassVal = [
+  {
+    field: "username",
+    type: "string",
+  },
+];
+
+module.exports.resetPassVal = [
+  {
+    field: "username",
+    type: "string",
+  },
+  {
+    field: "password",
+    type: "string",
+  },
+  {
+    field: "code",
+    type: "string",
+  },
+];

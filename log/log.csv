@@ -40,3 +40,10 @@ Wed Aug 18 2021 22:07:02 GMT+0700 (Indochina Time),400,Validate data fail !,loca
 Wed Aug 18 2021 22:07:08 GMT+0700 (Indochina Time),400,Update document requires atomic operators,localhost,::1
 Wed Aug 18 2021 22:07:10 GMT+0700 (Indochina Time),400,Update document requires atomic operators,localhost,::1
 Wed Aug 18 2021 22:08:08 GMT+0700 (Indochina Time),400,defaultUser is not defined,localhost,::1
+Thu Aug 19 2021 12:32:44 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 12:32:52 GMT+0700 (Indochina Time),404,Username has not exist !,localhost,::1
+Thu Aug 19 2021 12:42:22 GMT+0700 (Indochina Time),400,Validate data fail !,localhost,::1
+Thu Aug 19 2021 12:43:51 GMT+0700 (Indochina Time),404,Code wrong !,localhost,::1
+Thu Aug 19 2021 12:43:56 GMT+0700 (Indochina Time),404,Username has not exist !,localhost,::1
+Thu Aug 19 2021 12:44:00 GMT+0700 (Indochina Time),404,Code wrong !,localhost,::1
+Thu Aug 19 2021 12:44:18 GMT+0700 (Indochina Time),400,Password wrong !,localhost,::1
