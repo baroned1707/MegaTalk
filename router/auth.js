@@ -11,6 +11,8 @@ const {
   handleFindMultiUserByUsername,
   handleGetProfileUser,
   handleAddFriend,
+  handleAcceptFriend,
+  handleDeleteFriend,
 } = require("../controller/auth");
 
 //
@@ -27,6 +29,10 @@ router
   .route("/findmultiuserbyusername")
   .post(auth, handleFindMultiUserByUsername);
 router.route("/getprofileuser").get(auth, handleGetProfileUser);
-router.route("/addfriend").post(auth, handleAddFriend);
+router
+  .route("/addfriend")
+  .post(auth, handleAddFriend)
+  .put(auth, handleAcceptFriend)
+  .delete(auth, handleDeleteFriend);
 
 module.exports = router;

@@ -15,6 +15,8 @@ const {
   findUserbyUsernameVal,
   findMultiUserbyUsernameVal,
   addFriendVal,
+  acceptFriendVal,
+  deleteFriendVal,
 } = require("../base/validate");
 const { signToken } = require("../config/jwt");
 const { sendCode } = require("../config/nodemail");
@@ -26,7 +28,9 @@ const {
   updatePass,
   updateProfile,
   updateFriendRequest,
-} = require("../service");
+  addFriend,
+  deleteFriend,
+} = require("../service/auth");
 
 const handleLogin = async (req, res, next) => {
   try {
@@ -405,6 +409,12 @@ const handleAddFriend = async (req, res, next) => {
       );
     }
 
+    //find user
+    const user = await valHasExistDB("username", req.user.username, "User");
+    if (!user) {
+      return next(new Error(`${404}:${"Username with token has not exist !"}`));
+    }
+
     //find user add friend
     const find = await valHasExistDB(
       "username",
@@ -447,6 +457,162 @@ const handleAddFriend = async (req, res, next) => {
   }
 };
 
+const handleAcceptFriend = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, acceptFriendVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //find user
+    const user = await valHasExistDB("username", req.user.username, "User");
+    if (!user) {
+      return next(new Error(`${404}:${"Username with token has not exist !"}`));
+    }
+
+    //find user accept friend
+    const find = await valHasExistDB(
+      "username",
+      valBody.usernameAccept,
+      "User"
+    );
+    if (!find) {
+      return next(new Error(`${404}:${"Not found username accept friend !"}`));
+    }
+
+    //find request friend has exist
+    var requestHasExist = user.requestsFriendList.some(
+      (item) => item.username === valBody.usernameAccept
+    );
+    if (!requestHasExist) {
+      return next(new Error(`${404}:${"Not found request friend !"}`));
+    }
+
+    //add friend to user
+    user.friendsList.push({
+      username: valBody.usernameAccept,
+      createAt: new Date().toString(),
+    });
+
+    //add friend to useraccept
+    find.friendsList.push({
+      username: req.user.username,
+      createAt: new Date().toString(),
+    });
+
+    //remove request add friend in user
+    user.requestsFriendList = user.requestsFriendList.filter(
+      (item) => item.username != valBody.usernameAccept
+    );
+
+    //save add friend to db
+    const add = addFriend(
+      req.user.username,
+      valBody.usernameAccept,
+      user.friendsList,
+      find.friendsList,
+      user.requestsFriendList
+    );
+    if (!add) {
+      return next(
+        new Error(`${400}:${"Save add friend to db fail, Pls check log !"}`)
+      );
+    }
+
+    return res.send({
+      status: true,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleDeleteFriend = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, deleteFriendVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //check user === usernameDelete?
+    if (req.user.username === valBody.usernameDelete) {
+      return next(new Error(`${400}:${"You not unfriend with yourself !"}`));
+    }
+
+    //find user
+    const user = await valHasExistDB("username", req.user.username, "User");
+    if (!user) {
+      return next(new Error(`${404}:${"Username with token has not exist !"}`));
+    }
+
+    //find user accept friend
+    const find = await valHasExistDB(
+      "username",
+      valBody.usernameDelete,
+      "User"
+    );
+    if (!find) {
+      return next(new Error(`${404}:${"Not found username delete friend !"}`));
+    }
+
+    //find friend has exist
+    const userFriend = user.friendsList.some(
+      (item) => item.username === valBody.usernameDelete
+    );
+    if (!userFriend) {
+      return next(
+        new Error(`${404}:${"Not found username friend in your friend!"}`)
+      );
+    }
+    const findFriend = find.friendsList.some(
+      (item) => item.username === req.user.username
+    );
+    if (!findFriend) {
+      return next(
+        new Error(
+          `${404}:${"Not found username friend in username delete friend!"}`
+        )
+      );
+    }
+
+    //delete friend to user
+    user.friendsList = user.friendsList.filter(
+      (item) => item.username != valBody.usernameDelete
+    );
+
+    //delete friend to usernameDelete
+    find.friendsList = find.friendsList.filter(
+      (item) => item.username != req.user.username
+    );
+
+    //save delete friend to db
+    const del = await deleteFriend(
+      req.user.username,
+      valBody.usernameDelete,
+      user.friendsList,
+      find.friendsList
+    );
+
+    if (!del) {
+      return next(
+        new Error(`${404}:${"Save delete friend to db fail, Pls check log !"}`)
+      );
+    }
+
+    return res.send({
+      status: true,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
 module.exports = {
   handleLogin,
   handleRegister,
@@ -458,4 +624,6 @@ module.exports = {
   handleFindMultiUserByUsername,
   handleGetProfileUser,
   handleAddFriend,
+  handleAcceptFriend,
+  handleDeleteFriend,
 };

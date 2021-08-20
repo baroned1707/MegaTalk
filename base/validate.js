@@ -112,3 +112,17 @@ module.exports.addFriendVal = [
     type: "string",
   },
 ];
+
+module.exports.acceptFriendVal = [
+  {
+    field: "usernameAccept",
+    type: "string",
+  },
+];
+
+module.exports.deleteFriendVal = [
+  {
+    field: "usernameDelete",
+    type: "string",
+  },
+];

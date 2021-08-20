@@ -116,6 +116,94 @@ const updateFriendRequest = async (usernameFriend, requestsFriendList) => {
   return result;
 };
 
+const addFriend = async (
+  username,
+  usernameAccept,
+  newFriend,
+  newFriendAccept,
+  newRequestFriend
+) => {
+  var result = true;
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          friendsList: newFriend,
+          requestsFriendList: newRequestFriend,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  if (!result) {
+    return result;
+  }
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: usernameAccept,
+      },
+      {
+        $set: {
+          friendsList: newFriendAccept,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
+const deleteFriend = async (
+  username,
+  usernameDelete,
+  newFriend,
+  newFriendDelete
+) => {
+  var result = true;
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          friendsList: newFriend,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  if (!result) {
+    return result;
+  }
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: usernameDelete,
+      },
+      {
+        $set: {
+          friendsList: newFriendDelete,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
 module.exports = {
   valHasExistDB,
   createUser,
@@ -124,4 +212,6 @@ module.exports = {
   updatePass,
   updateProfile,
   updateFriendRequest,
+  addFriend,
+  deleteFriend,
 };
