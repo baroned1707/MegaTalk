@@ -23,9 +23,11 @@ const fixTextSpaceAndLine = (string) => {
 const writeLog = (code, message, req) => {
   let logPath = path.join(__dirname.replace("/base", "/log"), "/log.csv");
   let date = new Date().toString();
+  let body = JSON.stringify(req.body);
+  let headers = JSON.stringify(req.headers);
   let ip = req.ip;
   let hostname = req.hostname;
-  let row = `${date},${code},${message},${hostname},${ip}\n`;
+  let row = `${date},${code},${message},${hostname},${ip},${body}.${headers}\n`;
   fs.readFile(logPath, "utf8", (err, data) => {
     data += row;
     fs.writeFile(logPath, data, (err) => {
@@ -87,9 +89,49 @@ const createDefaultUser = (cloneObject) => {
     friendsList: [],
     chatsList: [],
     requestsFriendList: [],
+    notifications: [],
     avatar: "",
     background: "",
     code: generateCode(),
+  };
+};
+
+const createDefaultMess = (
+  sender,
+  receiver,
+  typeMess,
+  content,
+  index,
+  roomId
+) => {
+  return {
+    sender,
+    seeder: [],
+    type: typeMess,
+    content: content,
+    createAt: new Date().toString(),
+    index: index,
+    recall: false,
+    roomId,
+    receiver,
+  };
+};
+
+const createDefaultBoxChat = (sender, receiver, typeMess, content) => {
+  var member = receiver;
+  var roomId = createUniqueID();
+  var messagesList = [
+    createDefaultMess(sender, receiver, typeMess, content, 0, roomId),
+  ];
+  member.push(sender);
+  return {
+    roomId: roomId,
+    member,
+    messagesList: messagesList,
+    notifi: true,
+    createAt: new Date().toString(),
+    roomName: null,
+    type: member.length == 2 ? 0 : 1,
   };
 };
 
@@ -102,4 +144,6 @@ module.exports = {
   verifyPass,
   createDefaultUser,
   generateCode,
+  createDefaultBoxChat,
+  createDefaultMess,
 };

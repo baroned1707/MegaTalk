@@ -1,3 +1,4 @@
+//auth
 module.exports.loginVal = [
   {
     field: "username",
@@ -124,5 +125,21 @@ module.exports.deleteFriendVal = [
   {
     field: "usernameDelete",
     type: "string",
+  },
+];
+
+//chat
+module.exports.sendNewMessVal = [
+  {
+    field: "type",
+    type: "number",
+  },
+  {
+    field: "content",
+    type: "string",
+  },
+  {
+    field: "receiver",
+    type: "object",
   },
 ];
