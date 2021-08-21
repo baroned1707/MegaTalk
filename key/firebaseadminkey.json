@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "megatalk-a65f4",
+  "private_key_id": "0c137b852c3cf7288a80a4f47b40be4f36ee085c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCNh5IBw1Zv8pzb\nTCUWGbctOt6ky3Sxuf7mcQ9XvhtFvZ1Hrd148OqYFfGqqAPFZafgX+f2vmxgZ0e3\nREtu1IJWjgG9J4HwRl8YHo4hl7nh8LTLFPv/gkWWiVQr2JSkrc7M8kwphn6DjFeK\nfKVRyH+TTvndDaFAZmCwZ2NGZMe3+i8Pq6HnSEhNsQaS83gzuuZ5klImJhxJthjK\nsPBilkaRlWsbQz43sxgnRw8IHjGRyE6dDI651I2lW5k0cmJIrHuMqcr2NGEU4ldF\nut4eVg+g/Pu6v6OElwuG/YFLOo3hP+NakYGt+FrWKepb5pv2kMnCM5CFSSjn4d4q\n2hJurymVAgMBAAECggEAC0qIEvzvDfJYokRCZy95BjI+pf4XWsCAfgkCFNl1WoyE\nmj3cP/RUevqxM5DA8EQqbwOnwW8yvUQwHAZmUDrDBT3CFMGso6sxlf6GD1cH/OcT\nvWn4qstNWvOs0+ys+zBkocQo4F07BaqyJznHhK1OxEVWONUICtfAGgK9kFWk+1/r\ncD2opP6rerPrt35W3tThAnBloHonpCQGacg7x6jhpXJD+djQD/jRy76zjpLjAu0G\nSFAnVcgrQc1dBFSHOopA15mPkiMAxnPsccPPER4mK/RbvsPrVx8y2YR4lIqZzvTM\nRjAeG1a9cuBu3OELCeITFM3zWzjqP4K6h9/gL8n4EQKBgQDGfXPE72P6LABax2tG\n/cxbh6RWWi6UGQPeMQTUNrLHh8P98PajnVoQu1tiweIgUOnjOUe0ikd6cVfRA6H1\nc7p30jHGKdnzgr8gFBFHhZWot9fxN8znUjofCoTyY++0aFOChQQKrMmf8hAwMmoE\nrq2qtnfEDAQsDDFSOvbtWk1gPQKBgQC2iTRRqaix2YyEKgbXFkPw5MmsuoXDE9ll\nbWcxQUb/VAymeGFRyChrsYVTo49MoSbTH+K8kQ89XHnv6glqHG5vD6sNv6sZEFpa\nMWF5kMjbut+tD4kkfBLxZXelyvVxIXJgioXiv6Ed3OJjT9p0t4paqdss/qE7/7Pf\nwXN1ZPdsOQKBgQC8RK4Uc8RuvGGxuUlF0uGNR8FWrr9Tdc63Z+Nermsw2tPKAE7Q\nriWJjUyHBcPIRzcxcVlUI3zc5LkY5csvF5AcquDPR08VrERA1wf0wP5NQ+OtRvIx\nz0qVutKTXrs0cWgUerp0raOo9F7qeEcbHdxX+i7rY0JpzT7S8l7YjzipOQKBgHwa\nCm0fCSdpviQ5Io9nfuev1QHPipPX0e0olYkiVW/QqA0iOSBOElUty3TS9eFmiyvt\nOM11XkQctHaNyrrO+7Icl/JwBpayzIsXmar56eWiRuK1dktM4+AlWVRqCbdRwx6p\n7177ZEIWZACbUO4bvz/mzbHoqJxPO+776lC9RY7ZAoGASzwhUuIhm+dkGAMgPWuC\nsHefhcDGNRA4KuUKqBf+lKuCFWiLigG911+kWBfU6Hg8VEFCERgpEZzZQWL3u+lv\n/0sZpt/7wIyg43n9urfc1ZhKGANKhh4h79G76Q9TqKtW1++kacmpimQIOf8ofFNf\npBbg2gZiHdq4ivDBOiiXpII=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-n8qof@megatalk-a65f4.iam.gserviceaccount.com",
+  "client_id": "116462004150651579252",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-n8qof%40megatalk-a65f4.iam.gserviceaccount.com"
+}
