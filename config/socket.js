@@ -17,6 +17,13 @@ server.listen(3103, () => {
   console.log("Socket run port : " + port);
 });
 
+io.on("connection", (socket) => {
+  console.log("Connect: " + socket.id);
+  socket.on("disconnect", () => {
+    console.log("Disconnect: " + socket.id);
+  });
+});
+
 module.exports = {
   io,
 };

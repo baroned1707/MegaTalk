@@ -1,5 +1,5 @@
 const { createDefaultMess } = require("../base/until");
-
+const { io } = require("../config/socket");
 const db = require("../config/mongodb").db("MegaTalk");
 
 const createBoxChat = async (boxChat, member) => {
@@ -48,6 +48,11 @@ const createBoxChat = async (boxChat, member) => {
     if (!result) {
       return result;
     }
+    var action = {
+      type: "newBoxChat",
+      data: JSON.stringify(boxChat),
+    };
+    io.emit(`${member[i].username}`, action);
   }
 
   return result;
@@ -144,6 +149,11 @@ const insertMessByRoomID = async (boxChat, sender, type, content) => {
     if (!result) {
       return result;
     }
+    var action = {
+      type: "newMess",
+      data: JSON.stringify(createMess),
+    };
+    io.emit(`${member[i].username}`, action);
   }
 
   return result;

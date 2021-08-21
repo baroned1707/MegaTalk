@@ -24,6 +24,11 @@ const handleSendNewMess = async (req, res, next) => {
       return next(new Error(`${404}:${"Not found user !"}`));
     }
 
+    //validate you not send mess yourself
+    const sendYourSelf = valBody.receiver.includes(req.user.username);
+    if (sendYourSelf) {
+      return next(new Error(`${404}:${"You not send mess yourself !"}`));
+    }
     //validate receiver
     if (valBody.receiver.length == 0) {
       return next(new Error(`${404}:${"Receiver is empty !"}`));
