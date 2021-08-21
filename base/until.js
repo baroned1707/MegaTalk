@@ -102,7 +102,7 @@ const createDefaultMess = (
   typeMess,
   content,
   index,
-  roomId
+  roomID
 ) => {
   return {
     sender,
@@ -112,26 +112,33 @@ const createDefaultMess = (
     createAt: new Date().toString(),
     index: index,
     recall: false,
-    roomId,
+    roomID,
     receiver,
   };
 };
 
 const createDefaultBoxChat = (sender, receiver, typeMess, content) => {
   var member = receiver;
-  var roomId = createUniqueID();
+  var roomID = createUniqueID();
   var messagesList = [
-    createDefaultMess(sender, receiver, typeMess, content, 0, roomId),
+    createDefaultMess(sender, receiver, typeMess, content, 0, roomID),
   ];
   member.push(sender);
+  //set permisson with member on group
+  member = member.map((cur) => {
+    return {
+      username: cur,
+      permission: cur === sender ? 0 : 1, //0 admin , 1 member
+    };
+  });
   return {
-    roomId: roomId,
+    roomID: roomID,
     member,
     messagesList: messagesList,
     notifi: true,
     createAt: new Date().toString(),
     roomName: null,
-    type: member.length == 2 ? 0 : 1,
+    type: member.length == 2 ? 0 : 1, //0 private , 1 group
   };
 };
 

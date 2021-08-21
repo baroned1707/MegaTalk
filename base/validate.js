@@ -129,6 +129,7 @@ module.exports.deleteFriendVal = [
 ];
 
 //chat
+
 module.exports.sendNewMessVal = [
   {
     field: "type",
@@ -141,5 +142,20 @@ module.exports.sendNewMessVal = [
   {
     field: "receiver",
     type: "object",
+  },
+];
+
+module.exports.sendMessByRoomIDVal = [
+  {
+    field: "type",
+    type: "number",
+  },
+  {
+    field: "content",
+    type: "string",
+  },
+  {
+    field: "roomID",
+    type: "string",
   },
 ];
