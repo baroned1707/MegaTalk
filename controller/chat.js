@@ -19,6 +19,10 @@ const handleSendNewMess = async (req, res, next) => {
       return next(new Error(`${404}:${"Not found user !"}`));
     }
 
+    if (valBody.receiver.length == 0) {
+      return next(new Error(`${404}:${"Receiver is empty !"}`));
+    }
+
     //create Box chat
     const boxChat = createDefaultBoxChat(
       req.user.username,
