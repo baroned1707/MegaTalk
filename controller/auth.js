@@ -77,7 +77,6 @@ const handleLogin = async (req, res, next) => {
       status: true,
       data: {
         accessToken: accessToken,
-        user: find,
       },
     });
   } catch (e) {

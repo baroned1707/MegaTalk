@@ -182,6 +182,27 @@ const returnType = (type, content) => {
   }
 };
 
+const uploadFile = async (file, destination) => {
+  var result = true;
+  const filePath = file.destination + file.filename;
+  await admin
+    .storage()
+    .bucket()
+    .upload(filePath, {
+      destination: destination + file.filename,
+      public: true,
+    })
+    .then((res) => {
+      result = res[0].metadata.mediaLink;
+    })
+    .catch((e) => {
+      console.log(e);
+      result = false;
+    });
+  fs.unlink(filePath, function (err) {});
+  return result;
+};
+
 module.exports = {
   createUniqueID,
   fixTextSpaceAndLine,
@@ -195,4 +216,5 @@ module.exports = {
   createDefaultMess,
   sendNotifi,
   returnType,
+  uploadFile,
 };

@@ -1,6 +1,5 @@
 const { createDefaultMess, sendNotifi, returnType } = require("../base/until");
 const { io } = require("../config/socket");
-const { admin } = require("../config/firebaseadmin");
 const db = require("../config/mongodb").db("MegaTalk");
 
 const createBoxChat = async (boxChat, member, sender) => {
@@ -122,7 +121,7 @@ const insertMessByRoomID = async (boxChat, sender, type, content) => {
       return false;
     }
 
-    //find boxchat on user and insert mess
+    //find boxchat in user and insert mess
     const findBoxChat = findUser.chatsList.some(
       (item) => item.roomID === boxChat.roomID
     );
@@ -206,9 +205,205 @@ const findChatHasExist = async (member) => {
   return result;
 };
 
+const seederSave = async (roomID, index, username) => {
+  var result = true;
+
+  //find boxchat
+  const boxChat = await db.collection("BoxChat").findOne({
+    roomID: roomID,
+  });
+  if (!boxChat) {
+    return false;
+  }
+
+  //add seeder
+  await boxChat.messagesList.map((cur) => {
+    if (cur.index === index) {
+      var hasExist = cur.seeder.includes(username);
+      if (!hasExist) {
+        cur.seeder.push(username);
+      }
+    }
+  });
+
+  //save seeder on boxchat
+  await db.collection("BoxChat").updateOne(
+    {
+      roomID: roomID,
+    },
+    {
+      $set: {
+        messagesList: boxChat.messagesList,
+      },
+    }
+  );
+
+  //save seeder on boxchat user
+  const member = boxChat.member;
+  for (var i = 0; i < member.length; i++) {
+    //Find user member
+    let find = await db.collection("User").findOne({
+      username: member[i].username,
+    });
+    if (!find) {
+      return false;
+    }
+
+    //Insert boxchat on collection boxchat
+    find.chatsList.map((cur) => {
+      if (cur.roomID === roomID) {
+        cur.messagesList.map((cura) => {
+          if (cura.index == index) {
+            var hasExist = cura.seeder.includes(username);
+            if (!hasExist) {
+              cura.seeder.push(username);
+            }
+          }
+        });
+      }
+    });
+
+    await db
+      .collection("User")
+      .updateOne(
+        {
+          username: member[i].username,
+        },
+        {
+          $set: {
+            chatsList: find.chatsList,
+          },
+        }
+      )
+      .catch((e) => {
+        console.log(e);
+        result = false;
+      });
+
+    if (!result) {
+      return result;
+    }
+
+    //send notifi and socket all member != username
+    if (member[i].username != username) {
+      //send mess with socket
+      var action = {
+        type: "seeder",
+        data: JSON.stringify({
+          roomID,
+          index,
+          username,
+        }),
+      };
+      io.emit(`${member[i].username}`, action);
+    }
+  }
+
+  return result;
+};
+
+const recallSave = async (roomID, index, username) => {
+  var result = true;
+
+  //find boxchat
+  const boxChat = await db.collection("BoxChat").findOne({
+    roomID: roomID,
+  });
+  if (!boxChat) {
+    return false;
+  }
+
+  //add seeder
+  await boxChat.messagesList.map((cur) => {
+    if (cur.index === index) {
+      var hasExist = cur.seeder.includes(username);
+      if (!hasExist) {
+        cur.recall = true;
+      }
+    }
+  });
+
+  //save seeder on boxchat
+  await db.collection("BoxChat").updateOne(
+    {
+      roomID: roomID,
+    },
+    {
+      $set: {
+        messagesList: boxChat.messagesList,
+      },
+    }
+  );
+
+  //save seeder on boxchat user
+  const member = boxChat.member;
+  for (var i = 0; i < member.length; i++) {
+    //Find user member
+    let find = await db.collection("User").findOne({
+      username: member[i].username,
+    });
+    if (!find) {
+      return false;
+    }
+
+    //Insert boxchat on collection boxchat
+    find.chatsList.map((cur) => {
+      if (cur.roomID === roomID) {
+        cur.messagesList.map((cura) => {
+          if (cura.index == index) {
+            var hasExist = cura.seeder.includes(username);
+            if (!hasExist) {
+              cura.recall = true;
+            }
+          }
+        });
+      }
+    });
+
+    await db
+      .collection("User")
+      .updateOne(
+        {
+          username: member[i].username,
+        },
+        {
+          $set: {
+            chatsList: find.chatsList,
+          },
+        }
+      )
+      .catch((e) => {
+        console.log(e);
+        result = false;
+      });
+
+    if (!result) {
+      return result;
+    }
+
+    //send notifi and socket all member != username
+    if (member[i].username != username) {
+      //send mess with socket
+      var action = {
+        type: "recall",
+        data: JSON.stringify({
+          roomID,
+          index,
+          username,
+        }),
+      };
+      io.emit(`${member[i].username}`, action);
+    }
+  }
+
+  return result;
+};
+
 module.exports = {
   createBoxChat,
   validateMemberBoxChat,
   insertMessByRoomID,
   findChatHasExist,
+  seederSave,
+  recallSave,
 };

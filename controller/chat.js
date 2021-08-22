@@ -1,10 +1,17 @@
-const { sendNewMessVal, sendMessByRoomIDVal } = require("../base/validate");
-const { validate, createDefaultBoxChat } = require("../base/until");
+const {
+  sendNewMessVal,
+  sendMessByRoomIDVal,
+  seederVal,
+  recallVal,
+} = require("../base/validate");
+const { validate, createDefaultBoxChat, uploadFile } = require("../base/until");
 const {
   createBoxChat,
   validateMemberBoxChat,
   insertMessByRoomID,
   findChatHasExist,
+  seederSave,
+  recallSave,
 } = require("../service/chat");
 const { valHasExistDB } = require("../service/auth");
 
@@ -145,7 +152,95 @@ const handleSendMessByRoomID = async (req, res, next) => {
   }
 };
 
+const handleSeeder = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, seederVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //validate user data
+    const find = await valHasExistDB("username", req.user.username, "User");
+    if (!find) {
+      return next(new Error(`${404}:${"Not found user !"}`));
+    }
+
+    //save seeder to db
+    const seeder = seederSave(valBody.roomID, valBody.index, req.user.username);
+    if (!seeder) {
+      return next(
+        new Error(`${400}:${"Save seeder to mess fail, Pls check log !"}`)
+      );
+    }
+
+    return res.send({
+      status: true,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleRecall = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, recallVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //validate user data
+    const find = await valHasExistDB("username", req.user.username, "User");
+    if (!find) {
+      return next(new Error(`${404}:${"Not found user !"}`));
+    }
+
+    const recall = recallSave(valBody.roomID, valBody.index, req.user.username);
+    if (!recall) {
+      return next(
+        new Error(`${400}:${"Recall to mess fail, Pls check log !"}`)
+      );
+    }
+
+    return res.send({
+      status: true,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
+const handleUploadFile = async (req, res, next) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return next(new Error(`${404}:${"Please upload file !"}`));
+    }
+
+    //upload file on firebase storange
+    const upload = await uploadFile(req.file, `file/${req.user.username}/`);
+    if (!upload) {
+      return next(new Error(`${400}:${"Upload file fail!"}`));
+    }
+
+    return res.send({
+      status: true,
+      data: upload,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
 module.exports = {
   handleSendNewMess,
   handleSendMessByRoomID,
+  handleSeeder,
+  handleRecall,
+  handleUploadFile,
 };

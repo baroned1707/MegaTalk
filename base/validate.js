@@ -170,3 +170,25 @@ module.exports.sendMessByRoomIDVal = [
     type: "string",
   },
 ];
+
+module.exports.seederVal = [
+  {
+    field: "roomID",
+    type: "string",
+  },
+  {
+    field: "index",
+    type: "number",
+  },
+];
+
+module.exports.recallVal = [
+  {
+    field: "roomID",
+    type: "string",
+  },
+  {
+    field: "index",
+    type: "number",
+  },
+];
