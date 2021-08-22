@@ -17,6 +17,7 @@ const {
   addFriendVal,
   acceptFriendVal,
   deleteFriendVal,
+  updateDeviceTokenVal,
 } = require("../base/validate");
 const { signToken } = require("../config/jwt");
 const { sendCode } = require("../config/nodemail");
@@ -30,6 +31,7 @@ const {
   updateFriendRequest,
   addFriend,
   deleteFriend,
+  updateDeviceToken,
 } = require("../service/auth");
 
 const handleLogin = async (req, res, next) => {
@@ -613,6 +615,46 @@ const handleDeleteFriend = async (req, res, next) => {
   }
 };
 
+const handleUpdateDeviceToken = async (req, res, next) => {
+  try {
+    const body = req.body;
+    const valBody = validate(body, updateDeviceTokenVal);
+
+    //validate body data
+    if (!valBody) {
+      return next(new Error(`${400}:${"Validate data fail !"}`));
+    }
+
+    //validate user data
+    const find = await valHasExistDB("username", req.user.username, "User");
+    if (!find) {
+      return next(new Error(`${404}:${"Username has not exist !"}`));
+    }
+
+    //check token not empty
+    if (valBody.deviceToken == "") {
+      return next(new Error(`${400}:${"Token is empty !"}`));
+    }
+
+    //save devicetoken in db
+    const deviceToken = await updateDeviceToken(
+      req.user.username,
+      valBody.deviceToken
+    );
+    if (!deviceToken) {
+      return next(
+        new Error(`${404}:${"Save device token fail, Pls check log !"}`)
+      );
+    }
+
+    return res.send({
+      status: true,
+    });
+  } catch (e) {
+    return next(new Error(`${400}:${e.message}`));
+  }
+};
+
 module.exports = {
   handleLogin,
   handleRegister,
@@ -626,4 +668,5 @@ module.exports = {
   handleAddFriend,
   handleAcceptFriend,
   handleDeleteFriend,
+  handleUpdateDeviceToken,
 };

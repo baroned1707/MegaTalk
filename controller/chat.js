@@ -73,7 +73,7 @@ const handleSendNewMess = async (req, res, next) => {
 
     //Insert box chat on db
     console.log("Create");
-    const create = createBoxChat(boxChat, member);
+    const create = createBoxChat(boxChat, member, req.user.username);
     if (!create) {
       return next(new Error(`${400}:${`Create box fail, Pls check log !`}`));
     }

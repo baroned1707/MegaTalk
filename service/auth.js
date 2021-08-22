@@ -204,6 +204,26 @@ const deleteFriend = async (
   return result;
 };
 
+const updateDeviceToken = async (username, token) => {
+  var result = true;
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          deviceToken: token,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
 module.exports = {
   valHasExistDB,
   createUser,
@@ -214,4 +234,5 @@ module.exports = {
   updateFriendRequest,
   addFriend,
   deleteFriend,
+  updateDeviceToken,
 };

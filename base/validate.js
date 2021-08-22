@@ -35,6 +35,10 @@ module.exports.registerVal = [
     field: "gennder",
     type: "number",
   },
+  {
+    field: "deviceToken",
+    type: "string",
+  },
 ];
 
 module.exports.activeUserVal = [
@@ -124,6 +128,13 @@ module.exports.acceptFriendVal = [
 module.exports.deleteFriendVal = [
   {
     field: "usernameDelete",
+    type: "string",
+  },
+];
+
+module.exports.updateDeviceTokenVal = [
+  {
+    field: "deviceToken",
     type: "string",
   },
 ];

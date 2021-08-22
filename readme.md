@@ -21,3 +21,13 @@ Step by step to run project
 - Token field 'jwt'
 - Toekn format "JWT " + token
 - Validate data form {field: fieldname , type:typevalue}
+
+//type mess
+case 0:
+return content;
+case 1:
+return "Gửi một ảnh";
+case 2:
+return "Gửi một file";
+case 3:
+return "Gửi một bản ghi âm";

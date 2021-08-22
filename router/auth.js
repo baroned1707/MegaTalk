@@ -13,6 +13,7 @@ const {
   handleAddFriend,
   handleAcceptFriend,
   handleDeleteFriend,
+  handleUpdateDeviceToken,
 } = require("../controller/auth");
 
 //
@@ -29,6 +30,7 @@ router
   .route("/findmultiuserbyusername")
   .post(auth, handleFindMultiUserByUsername);
 router.route("/getprofileuser").get(auth, handleGetProfileUser);
+router.route("/updatedevicetoken").post(auth, handleUpdateDeviceToken);
 router
   .route("/addfriend")
   .post(auth, handleAddFriend)

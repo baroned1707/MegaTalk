@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const { admin } = require("../config/firebaseadmin");
 
 const createUniqueID = () => {
   var time = new Date();
@@ -142,6 +143,45 @@ const createDefaultBoxChat = (sender, receiver, typeMess, content) => {
   };
 };
 
+const sendNotifi = async (title, body, data, token) => {
+  const mess = {
+    notification: {
+      title: title,
+      body: body,
+    },
+    data: {
+      sender: data.sender,
+      content: data.content,
+      roomID: data.roomID,
+      createAt: data.createAt,
+    },
+    token: token,
+  };
+  await admin
+    .messaging()
+    .send(mess)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log("Successfully sent message:", response);
+    })
+    .catch((error) => {
+      console.log("Error sending message:", error);
+    });
+};
+
+const returnType = (type, content) => {
+  switch (type) {
+    case 0:
+      return content;
+    case 1:
+      return "Gửi một ảnh";
+    case 2:
+      return "Gửi một file";
+    case 3:
+      return "Gửi một bản ghi âm";
+  }
+};
+
 module.exports = {
   createUniqueID,
   fixTextSpaceAndLine,
@@ -153,4 +193,6 @@ module.exports = {
   generateCode,
   createDefaultBoxChat,
   createDefaultMess,
+  sendNotifi,
+  returnType,
 };

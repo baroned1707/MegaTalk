@@ -1,8 +1,9 @@
-const { createDefaultMess } = require("../base/until");
+const { createDefaultMess, sendNotifi, returnType } = require("../base/until");
 const { io } = require("../config/socket");
+const { admin } = require("../config/firebaseadmin");
 const db = require("../config/mongodb").db("MegaTalk");
 
-const createBoxChat = async (boxChat, member) => {
+const createBoxChat = async (boxChat, member, sender) => {
   var result = true;
 
   //insert boxchat on collection Boxchat
@@ -48,11 +49,24 @@ const createBoxChat = async (boxChat, member) => {
     if (!result) {
       return result;
     }
-    var action = {
-      type: "newBoxChat",
-      data: JSON.stringify(boxChat),
-    };
-    io.emit(`${member[i].username}`, action);
+
+    //send notifi and socket all member != sender
+    if (member[i].username != sender) {
+      //send notifi with fcm
+      if (find.deviceToken != "") {
+        var mess = boxChat.messagesList[0];
+        var title = `${member[i].username} vừa gửi tin nhắn cho bạn`;
+        var body = returnType(mess.type, mess.content);
+        await sendNotifi(title, body, mess, find.deviceToken);
+      }
+
+      //send mess with socket
+      var action = {
+        type: "newBoxChat",
+        data: JSON.stringify(boxChat),
+      };
+      io.emit(`${member[i].username}`, action);
+    }
   }
 
   return result;
@@ -149,11 +163,24 @@ const insertMessByRoomID = async (boxChat, sender, type, content) => {
     if (!result) {
       return result;
     }
-    var action = {
-      type: "newMess",
-      data: JSON.stringify(createMess),
-    };
-    io.emit(`${member[i].username}`, action);
+
+    //send notifi and socket all member != sender
+    if (member[i].username != sender) {
+      //send notifi with fcm
+      if (findUser.deviceToken != "") {
+        var mess = createMess;
+        var title = `${member[i].username} vừa gửi tin nhắn cho bạn`;
+        var body = returnType(mess.type, mess.content);
+        await sendNotifi(title, body, mess, findUser.deviceToken);
+      }
+
+      //send mess with socket
+      var action = {
+        type: "newMess",
+        data: JSON.stringify(createMess),
+      };
+      io.emit(`${member[i].username}`, action);
+    }
   }
 
   return result;
