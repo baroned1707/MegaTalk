@@ -121,9 +121,6 @@ const createDefaultMess = (
 const createDefaultBoxChat = (sender, receiver, typeMess, content) => {
   var member = receiver;
   var roomID = createUniqueID();
-  var messagesList = [
-    createDefaultMess(sender, receiver, typeMess, content, 0, roomID),
-  ];
   member.push(sender);
   //set permisson with member on group
   member = member.map((cur) => {
@@ -132,6 +129,10 @@ const createDefaultBoxChat = (sender, receiver, typeMess, content) => {
       permission: cur === sender ? 0 : 1, //0 admin , 1 member
     };
   });
+  var tempReceiver = member.filter((item) => item.username != sender);
+  var messagesList = [
+    createDefaultMess(sender, tempReceiver, typeMess, content, 0, roomID),
+  ];
   return {
     roomID: roomID,
     member,

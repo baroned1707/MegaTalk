@@ -192,3 +192,43 @@ module.exports.recallVal = [
     type: "number",
   },
 ];
+
+module.exports.addMemberGroupVal = [
+  {
+    field: "username",
+    type: "string",
+  },
+  {
+    field: "roomID",
+    type: "string",
+  },
+];
+
+module.exports.deleteMemberGroupVal = [
+  {
+    field: "username",
+    type: "string",
+  },
+  {
+    field: "roomID",
+    type: "string",
+  },
+];
+
+module.exports.deleteMessVal = [
+  {
+    field: "roomID",
+    type: "string",
+  },
+  {
+    field: "index",
+    type: "number",
+  },
+];
+
+module.exports.deleteBoxChatVal = [
+  {
+    field: "roomID",
+    type: "string",
+  },
+];

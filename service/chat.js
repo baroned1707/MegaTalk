@@ -87,7 +87,7 @@ const validateMemberBoxChat = async (member) => {
 
 const insertMessByRoomID = async (boxChat, sender, type, content) => {
   var result = true;
-  var receiver = boxChat.member.filter((item) => item != sender);
+  var receiver = boxChat.member.filter((item) => item.username != sender);
   var createMess = createDefaultMess(
     sender,
     receiver,
@@ -399,6 +399,181 @@ const recallSave = async (roomID, index, username) => {
   return result;
 };
 
+const addMemberBoxChat = async (roomID, newMember, memberAdd) => {
+  var result = true;
+  //find boxchat
+  const boxChat = await db.collection("BoxChat").findOne({
+    roomID: roomID,
+  });
+  if (!boxChat) {
+    result = false;
+  }
+
+  //update member to boxchat
+  await db
+    .collection("BoxChat")
+    .updateOne(
+      {
+        roomID: roomID,
+      },
+      {
+        $set: { member: newMember },
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      result = false;
+    });
+
+  if (!result) {
+    return false;
+  }
+
+  //update newMember to Boxchat
+  var member = newMember;
+  for (var i = 0; i < member.length; i++) {
+    var findUser = await db.collection("User").findOne({
+      username: member[i].username,
+    });
+    if (!findUser) {
+      return false;
+    }
+
+    if (memberAdd === member[i].username) {
+      //add boxchat if this newmember
+      delete boxChat._id;
+      boxChat.member = newMember;
+      findUser.chatsList.push(boxChat);
+    } else {
+      //add member to snapshot chat user
+      findUser.chatsList.map((cur, i) => {
+        if (cur.roomID == roomID) {
+          cur.member = newMember;
+        }
+      });
+    }
+
+    //save to db
+    await db
+      .collection("User")
+      .updateOne(
+        {
+          username: member[i].username,
+        },
+        {
+          $set: { chatsList: findUser.chatsList },
+        }
+      )
+      .catch((e) => {
+        console.log(e);
+        result = false;
+      });
+  }
+
+  return result;
+};
+
+const deleteMemberBoxChat = async (roomID, newMember, memberDel) => {
+  var result = true;
+  //find boxchat
+  const boxChat = await db.collection("BoxChat").findOne({
+    roomID: roomID,
+  });
+  if (!boxChat) {
+    result = false;
+  }
+
+  //update member to boxchat
+  await db
+    .collection("BoxChat")
+    .updateOne(
+      {
+        roomID: roomID,
+      },
+      {
+        $set: { member: newMember },
+      }
+    )
+    .catch((e) => {
+      console.log(e);
+      result = false;
+    });
+
+  if (!result) {
+    return false;
+  }
+
+  //update newMember to Boxchat
+  var member = boxChat.member;
+  for (var i = 0; i < member.length; i++) {
+    var findUser = await db.collection("User").findOne({
+      username: member[i].username,
+    });
+    if (!findUser) {
+      return false;
+    }
+
+    if (memberDel === member[i].username) {
+      //del boxchat if this newmember
+      findUser.chatsList = findUser.chatsList.filter(
+        (item) => item.roomID != roomID
+      );
+    } else {
+      //add member to snapshot chat user
+      findUser.chatsList.map((cur, i) => {
+        if (cur.roomID == roomID) {
+          cur.member = newMember;
+        }
+      });
+    }
+
+    //save to db
+    await db
+      .collection("User")
+      .updateOne(
+        {
+          username: member[i].username,
+        },
+        {
+          $set: { chatsList: findUser.chatsList },
+        }
+      )
+      .catch((e) => {
+        console.log(e);
+        result = false;
+      });
+  }
+
+  return result;
+};
+
+const updateChatList = async (username, newChatList) => {
+  var result = true;
+  var findUser = await db.collection("User").findOne({
+    username: username,
+  });
+  if (!findUser) {
+    return false;
+  }
+
+  await db
+    .collection("User")
+    .updateOne(
+      {
+        username: username,
+      },
+      {
+        $set: {
+          chatsList: newChatList,
+        },
+      }
+    )
+    .catch((e) => {
+      result = false;
+    });
+  return result;
+};
+
 module.exports = {
   createBoxChat,
   validateMemberBoxChat,
@@ -406,4 +581,7 @@ module.exports = {
   findChatHasExist,
   seederSave,
   recallSave,
+  addMemberBoxChat,
+  deleteMemberBoxChat,
+  updateChatList,
 };
